@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overflow Parable - Employee Orientation</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts for glitch/overflow typography variations -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Fira+Code:wght@400;700&family=Inter:wght@300;400;600;800&family=Press+Start+2P&family=Rubik+Glitch&family=Syne+Mono&display=swap" rel="stylesheet">
+
+    <style>
+        /* Base typography & theme smooth transitions */
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 1.2s ease, color 0.5s ease;
+        }
+
+        /* Glitch font utility classes dynamically assigned on Name Overflow */
+        .font-glitch-1 { font-family: 'Rubik Glitch', cursive; transform: rotate(-1deg) scale(1.05); }
+        .font-glitch-2 { font-family: 'Press Start 2P', monospace; letter-spacing: -2px; }
+        .font-glitch-3 { font-family: 'Creepster', display; letter-spacing: 2px; }
+        .font-glitch-4 { font-family: 'Syne Mono', monospace; font-style: italic; }
+
+        /* Corporate grid lines background overlay */
+        .bg-grid-pattern {
+            background-size: 30px 30px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        }
+
+        /* Pulsing glitch animation for title when glitched */
+        @keyframes headerGlow {
+            0%, 100% { text-shadow: 0 0 10px rgba(239, 68, 68, 0.8), 0 0 20px rgba(220, 38, 38, 0.5); }
+            50% { text-shadow: 0 0 20px rgba(168, 85, 247, 0.9), 0 0 35px rgba(236, 72, 153, 0.7); }
+        }
+
+        .glitch-active {
+            animation: headerGlow 1.5s infinite alternate;
+            color: #ef4444 !important;
+        }
+
+        /* Boss Avatar Pulse animation */
+        @keyframes bossSpeak {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        .boss-talking {
+            animation: bossSpeak 0.4s ease-in-out infinite;
+        }
+
+        /* Binary LED Glow Box styling */
+        .bit-box {
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.6), 0 0 15px rgba(59, 130, 246, 0.3);
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* Smooth button color transitions */
+        .random-btn {
+            transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        /* Shake animation for input errors/overflow alerts */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+
+        .shake-element {
+            animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-between p-4 md:p-8 bg-grid-pattern relative overflow-x-hidden selection:bg-indigo-500 selection:text-white" id="mainBody">
+
+    <!-- Top Bar / App Title -->
+    <header class="w-full max-w-4xl flex flex-col md:flex-row justify-between items-center pb-6 border-b border-slate-800/80 mb-6 gap-4">
+        <div class="flex items-center space-x-3">
+            <div class="p-3 bg-indigo-600/20 border border-indigo-500/30 rounded-xl text-indigo-400">
+                <i class="fa-solid me-0 fa-briefcase text-2xl"></i>
+            </div>
+            <div>
+                <!-- Header Title target for step 1 font glitch -->
+                <h1 id="appHeader" class="text-3xl md:text-4xl font-extrabold tracking-tight text-white transition-all duration-300">
+                    OVERFLOW PARABLE
+                </h1>
+                <p id="appSubheader" class="text-xs text-slate-400 font-medium tracking-wider uppercase">
+                    STANLEY-CORP ORIENTATION & COMPLIANCE TERMINAL v4.02
+                </p>
+            </div>
+        </div>
+
+        <button onclick="resetSystem()" class="px-4 py-2 bg-slate-800/80 hover:bg-slate-700 text-slate-300 rounded-lg text-sm font-semibold border border-slate-700 hover:border-slate-500 transition-all flex items-center space-x-2 shadow-lg hover:shadow-indigo-500/10 active:scale-95">
+            <i class="fa-solid fa-rotate-left text-xs"></i>
+            <span>Reset Terminal</span>
+        </button>
+    </header>
+
+    <main class="w-full max-w-4xl flex flex-col gap-6 my-auto">
+
+        <!-- Boss dialogue / Narrative Speech Bubble Component -->
+        <section class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 md:p-6 shadow-2xl relative overflow-hidden backdrop-blur-md">
+            <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="flex items-start space-x-4">
+                <!-- Boss Avatar -->
+                <div class="relative flex-shrink-0">
+                    <div id="bossAvatar" class="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-slate-800 border-2 border-indigo-500/40 flex items-center justify-center text-3xl shadow-inner transition-transform duration-300">
+                        👨‍💼
+                    </div>
+                    <span id="bossStatusBadge" class="absolute -bottom-1 -right-1 flex h-4 w-4">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-4 w-4 bg-emerald-500 border-2 border-slate-900"></span>
+                    </span>
+                </div>
+
+                <!-- Speech Bubble Content -->
+                <div class="flex-1">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-bold uppercase tracking-widest text-indigo-400">Executive Overseer (The Boss)</span>
+                        <span id="speechStateTag" class="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded font-mono border border-slate-700">STATUS: OBSERVING</span>
+                    </div>
+                    <p id="bossDialogue" class="text-base md:text-lg text-slate-200 leading-relaxed font-medium min-h-[3rem] transition-all duration-200">
+                        "Welcome, new hire! Please enter your official Employee Name. Make sure it is strictly AT MOST 20 characters."
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Inputs Section -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            <!-- STEP 1: Name Input -->
+            <div id="cardStep1" class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col justify-between transition-all duration-300 hover:border-slate-700">
+                <div>
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                            <span class="w-5 h-5 rounded-full bg-slate-800 text-slate-300 inline-flex items-center justify-center text-xs border border-slate-700">1</span>
+                            Employee Name
+                        </span>
+                        <span id="nameCounter" class="text-xs font-mono text-slate-400 bg-slate-800 px-2 py-1 rounded border border-slate-700/50">
+                            0 / 20
+                        </span>
+                    </div>
+                    
+                    <p class="text-xs text-slate-400 mb-4">Official workplace designation. Maximum limit enforced.</p>
+
+                    <div class="relative">
+                        <input type="text" id="nameInput" placeholder="Enter name..." 
+                            class="w-full bg-slate-950 border border-slate-700 focus:border-indigo-500 rounded-xl px-3.5 py-2.5 text-sm font-medium text-slate-100 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                            oninput="handleNameInput(this.value)">
+                    </div>
+                </div>
+
+                <div id="nameStatusText" class="mt-4 text-[11px] text-slate-500 font-mono flex items-center gap-1.5">
+                    <i class="fa-solid fa-circle-info text-slate-600"></i>
+                    <span>Limit: 20 characters max</span>
+                </div>
+            </div>
+
+            <!-- STEP 2: Desired Salary Input -->
+            <div id="cardStep2" class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col justify-between transition-all duration-300 hover:border-slate-700">
+                <div>
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                            <span class="w-5 h-5 rounded-full bg-slate-800 text-slate-300 inline-flex items-center justify-center text-xs border border-slate-700">2</span>
+                            Desired Salary ($)
+                        </span>
+                        <span id="salaryCounter" class="text-xs font-mono text-slate-400 bg-slate-800 px-2 py-1 rounded border border-slate-700/50">
+                            0 / 10 digits
+                        </span>
+                    </div>
+
+                    <p class="text-xs text-slate-400 mb-4">Annual monetary compensation request. Do not exceed 10 digits.</p>
+
+                    <div class="relative">
+                        <span class="absolute left-3.5 top-2.5 text-slate-500 font-mono text-sm">$</span>
+                        <input type="text" id="salaryInput" placeholder="e.g. 50000" 
+                            class="w-full bg-slate-950 border border-slate-700 focus:border-indigo-500 rounded-xl pl-8 pr-3.5 py-2.5 text-sm font-mono text-slate-100 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                            oninput="handleSalaryInput(this)">
+                    </div>
+                </div>
+
+                <div id="salaryStatusText" class="mt-4 text-[11px] text-slate-500 font-mono flex items-center gap-1.5">
+                    <i class="fa-solid fa-shield-halved text-slate-600"></i>
+                    <span>Server thermal limit: 10 digits</span>
+                </div>
+            </div>
+
+            <!-- STEP 3: 3-Bit Compensation Counter -->
+            <div id="cardStep3" class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col justify-between transition-all duration-300 hover:border-slate-700">
+                <div>
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                            <span class="w-5 h-5 rounded-full bg-slate-800 text-slate-300 inline-flex items-center justify-center text-xs border border-slate-700">3</span>
+                            Pay Grade Shift
+                        </span>
+                        <span class="text-xs font-mono text-indigo-400 bg-indigo-950/80 border border-indigo-800/50 px-2 py-0.5 rounded">
+                            3-BIT
+                        </span>
+                    </div>
+
+                    <p class="text-xs text-slate-400 mb-3">Adjust binary rank compensation index.</p>
+
+                    <!-- Binary LED Display -->
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-center mb-4 bit-box">
+                        <div id="bitDisplay" class="text-3xl font-bold font-mono tracking-widest text-emerald-400 transition-all">
+                            000
+                        </div>
+                        <div id="bitDecimal" class="text-[10px] text-slate-500 uppercase tracking-widest mt-1 font-mono">
+                            Dec Value: 0
+                        </div>
+                    </div>
+
+                    <!-- Bit Controls -->
+                    <div class="flex items-center justify-center gap-3">
+                        <button id="decrementBtn" onclick="adjustBit(-1)" class="random-btn w-1/2 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-lg font-bold flex items-center justify-center gap-2 shadow hover:scale-105 active:scale-95">
+                            <i class="fa-solid fa-minus text-sm"></i> -1
+                        </button>
+                        <button id="incrementBtn" onclick="adjustBit(1)" class="random-btn w-1/2 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white border border-indigo-500 rounded-xl text-lg font-bold flex items-center justify-center gap-2 shadow hover:scale-105 active:scale-95">
+                            <i class="fa-solid fa-plus text-sm"></i> +1
+                        </button>
+                    </div>
+                </div>
+
+                <div id="bitStatusText" class="mt-4 text-[11px] text-slate-500 font-mono flex items-center gap-1.5">
+                    <i class="fa-solid fa-microchip text-slate-600"></i>
+                    <span>Range: 000 (0) to 111 (7)</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Active Overflow Status Dashboard -->
+        <section class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 shadow-inner">
+            <h2 class="text-xs font-extrabold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-chart-line text-indigo-400"></i>
+                Executive Overflow Matrix & Compliance Status
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <!-- Status 1: Font Glitch -->
+                <div id="statusItem1" class="flex items-center justify-between p-3 bg-slate-950/70 border border-slate-800 rounded-xl transition-all">
+                    <div class="flex items-center space-x-2.5">
+                        <div id="statusIcon1" class="w-3 h-3 rounded-full bg-slate-700"></div>
+                        <span class="text-xs font-semibold text-slate-300">Name Overflow</span>
+                    </div>
+                    <span id="statusTag1" class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-500 border border-slate-700/50">NORMAL</span>
+                </div>
+
+                <!-- Status 2: Greed Alarm -->
+                <div id="statusItem2" class="flex items-center justify-between p-3 bg-slate-950/70 border border-slate-800 rounded-xl transition-all">
+                    <div class="flex items-center space-x-2.5">
+                        <div id="statusIcon2" class="w-3 h-3 rounded-full bg-slate-700"></div>
+                        <span class="text-xs font-semibold text-slate-300">Greed Alarm</span>
+                    </div>
+                    <span id="statusTag2" class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-500 border border-slate-700/50">STANDBY</span>
+                </div>
+
+                <!-- Status 3: Bit Loop -->
+                <div id="statusItem3" class="flex items-center justify-between p-3 bg-slate-950/70 border border-slate-800 rounded-xl transition-all">
+                    <div class="flex items-center space-x-2.5">
+                        <div id="statusIcon3" class="w-3 h-3 rounded-full bg-slate-700"></div>
+                        <span class="text-xs font-semibold text-slate-300">Bit Loop (Wrapped)</span>
+                    </div>
+                    <span id="statusTag3" class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-500 border border-slate-700/50">STABLE</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full max-w-4xl pt-6 border-t border-slate-800/60 mt-6 text-center text-xs text-slate-500 flex flex-col sm:flex-row justify-between items-center gap-2">
+        <p>© 2026 Stanley-Corp Global HR. All corporate infractions are logged automatically.</p>
+        <p class="font-mono text-[11px] text-slate-600">Overflow Parable • Interactive Parody</p>
+    </footer>
+
+    <script>
+        // State variables
+        let currentBitValue = 0; // 0 to 7 (000 to 111)
+        let nameOverflowTriggered = false;
+        let salaryOverflowTriggered = false;
+        let bitOverflowTriggered = false;
+
+        let backgroundCycleInterval = null;
+        let fontCycleInterval = null;
+
+        const glitchFontClasses = ['font-glitch-1', 'font-glitch-2', 'font-glitch-3', 'font-glitch-4'];
+        
+        // Dynamic alarm background colors for Salary Overflow
+        const alarmBgColors = [
+            '#450a0a', // Crimson
+            '#3b0764', // Dark Neon Violet
+            '#064e3b', // Dark Emerald
+            '#1e1b4b', // Deep Indigo
+            '#713f12'  // Dark Gold
+        ];
+        let colorCycleIndex = 0;
+
+        // Sound generator using Web Audio API (Synthesizer - no external assets required)
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new AudioContext();
+            }
+        }
+
+        function playSound(type) {
+            try {
+                initAudio();
+                if (!audioCtx) return;
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                const now = audioCtx.currentTime;
+
+                if (type === 'type') {
+                    // Quick soft click
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(400 + Math.random() * 200, now);
+                    gain.gain.setValueAtTime(0.02, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                } else if (type === 'glitch') {
+                    // Retro pitch bend glitch
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(120, now);
+                    osc.frequency.linearRampToValueAtTime(600, now + 0.2);
+                    gain.gain.setValueAtTime(0.1, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+                } else if (type === 'alarm') {
+                    // Warning buzz
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(220, now);
+                    osc.frequency.setValueAtTime(110, now + 0.1);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                } else if (type === 'wrap') {
+                    // Playful wrap sound
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(800, now);
+                    osc.frequency.exponentialRampToValueAtTime(150, now + 0.3);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                } else if (type === 'error') {
+                    // Low error bump
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(90, now);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+                    osc.start(now);
+                    osc.stop(now + 0.15);
+                }
+            } catch (e) {
+                // Audio autoplay might be restricted prior to interaction
+            }
+        }
+
+        // Helper: Trigger Boss Avatar speaking animation
+        function animateBossSpeech(text, emoji = '👨‍💼') {
+            const dialogueEl = document.getElementById('bossDialogue');
+            const avatarEl = document.getElementById('bossAvatar');
+            
+            avatarEl.innerText = emoji;
+            avatarEl.classList.add('boss-talking');
+            dialogueEl.classList.add('opacity-0');
+
+            setTimeout(() => {
+                dialogueEl.innerText = `"${text}"`;
+                dialogueEl.classList.remove('opacity-0');
+            }, 150);
+
+            setTimeout(() => {
+                avatarEl.classList.remove('boss-talking');
+            }, 1200);
+        }
+
+        function handleNameInput(val) {
+            playSound('type');
+            const counterEl = document.getElementById('nameCounter');
+            const headerEl = document.getElementById('appHeader');
+            const cardEl = document.getElementById('cardStep1');
+            const len = val.length;
+
+            counterEl.innerText = `${len} / 20`;
+
+            if (len > 20) {
+                counterEl.classList.add('text-red-400', 'bg-red-950/80', 'border-red-800');
+                counterEl.classList.remove('text-slate-400', 'bg-slate-800');
+
+                if (!nameOverflowTriggered) {
+                    nameOverflowTriggered = true;
+                    playSound('glitch');
+                    cardEl.classList.add('shake-element');
+                    setTimeout(() => cardEl.classList.remove('shake-element'), 500);
+
+                    // Glitch header typography
+                    headerEl.classList.add('glitch-active');
+                    
+                    // Cycle font styles
+                    if (!fontCycleInterval) {
+                        let fIdx = 0;
+                        fontCycleInterval = setInterval(() => {
+                            glitchFontClasses.forEach(c => headerEl.classList.remove(c));
+                            headerEl.classList.add(glitchFontClasses[fIdx % glitchFontClasses.length]);
+                            fIdx++;
+                        }, 400);
+                    }
+
+                    animateBossSpeech("A name that long? The system's typography can't handle such vanity! Look what you've done to the header!", "🥸");
+
+                    // Update Status Dashboard
+                    document.getElementById('statusIcon1').className = 'w-3 h-3 rounded-full bg-red-500 animate-pulse';
+                    document.getElementById('statusTag1').className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-red-950 text-red-300 border border-red-800';
+                    document.getElementById('statusTag1').innerText = 'FONT OVERFLOW';
+                }
+            } else {
+                counterEl.classList.remove('text-red-400', 'bg-red-950/80', 'border-red-800');
+                counterEl.classList.add('text-slate-400', 'bg-slate-800');
+
+                if (nameOverflowTriggered) {
+                    nameOverflowTriggered = false;
+                    if (fontCycleInterval) {
+                        clearInterval(fontCycleInterval);
+                        fontCycleInterval = null;
+                    }
+                    glitchFontClasses.forEach(c => headerEl.classList.remove(c));
+                    headerEl.classList.remove('glitch-active');
+
+                    animateBossSpeech("Thank you for returning to a reasonable corporate name length.", "👨‍💼");
+
+                    document.getElementById('statusIcon1').className = 'w-3 h-3 rounded-full bg-slate-700';
+                    document.getElementById('statusTag1').className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-500 border border-slate-700/50';
+                    document.getElementById('statusTag1').innerText = 'NORMAL';
+                }
+            }
+        }
+
+        function handleSalaryInput(input) {
+            playSound('type');
+            // Clean non-digits for precise digit calculation
+            let digitsOnly = input.value.replace(/\D/g, '');
+            
+            const counterEl = document.getElementById('salaryCounter');
+            const cardEl = document.getElementById('cardStep2');
+            const digitCount = digitsOnly.length;
+
+            counterEl.innerText = `${digitCount} / 10 digits`;
+
+            if (digitCount > 10) {
+                counterEl.classList.add('text-red-400', 'bg-red-950/80', 'border-red-800');
+                counterEl.classList.remove('text-slate-400', 'bg-slate-800');
+
+                if (!salaryOverflowTriggered) {
+                    salaryOverflowTriggered = true;
+                    playSound('alarm');
+                    cardEl.classList.add('shake-element');
+                    setTimeout(() => cardEl.classList.remove('shake-element'), 500);
+
+                    animateBossSpeech("Greed detected! The financial servers are overheating from your absurd expectations!", "🤬");
+
+                    // Start dynamic background color shift cycle every 5 seconds
+                    startBackgroundCycle();
+
+                    // Update Status Dashboard
+                    document.getElementById('statusIcon2').className = 'w-3 h-3 rounded-full bg-amber-500 animate-ping';
+                    document.getElementById('statusTag2').className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800';
+                    document.getElementById('statusTag2').innerText = 'OVERHEATING';
+                }
+            } else {
+                counterEl.classList.remove('text-red-400', 'bg-red-950/80', 'border-red-800');
+                counterEl.classList.add('text-slate-400', 'bg-slate-800');
+
+                if (salaryOverflowTriggered) {
+                    salaryOverflowTriggered = false;
+                    stopBackgroundCycle();
+
+                    animateBossSpeech("Appropriate salary expectations restored. Financial servers cooling down.", "📈");
+
+                    document.getElementById('statusIcon2').className = 'w-3 h-3 rounded-full bg-slate-700';
+                    document.getElementById('statusTag2').className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-500 border border-slate-700/50';
+                    document.getElementById('statusTag2').innerText = 'STANDBY';
+                }
+            }
+        }
+
+        function startBackgroundCycle() {
+            if (backgroundCycleInterval) return;
+            
+            // Immediate first color shift
+            shiftBackgroundColor();
+
+            backgroundCycleInterval = setInterval(() => {
+                shiftBackgroundColor();
+            }, 5000);
+        }
+
+        function shiftBackgroundColor() {
+            const body = document.getElementById('mainBody');
+            const targetColor = alarmBgColors[colorCycleIndex % alarmBgColors.length];
+            body.style.backgroundColor = targetColor;
+            colorCycleIndex++;
+        }
+
+        function stopBackgroundCycle() {
+            if (backgroundCycleInterval) {
+                clearInterval(backgroundCycleInterval);
+                backgroundCycleInterval = null;
+            }
+            document.getElementById('mainBody').style.backgroundColor = '#020617'; // default slate-950
+        }
+
+        function adjustBit(delta) {
+            const displayEl = document.getElementById('bitDisplay');
+            const decimalEl = document.getElementById('bitDecimal');
+            const cardEl = document.getElementById('cardStep3');
+
+            if (delta === -1) {
+                if (currentBitValue === 0) {
+                    // Underflow behavior
+                    playSound('error');
+                    cardEl.classList.add('shake-element');
+                    setTimeout(() => cardEl.classList.remove('shake-element'), 400);
+
+                    animateBossSpeech("You can't go below absolute zero compensation! What do you want to do, pay us to work here?", "📉");
+                    return;
+                }
+                currentBitValue--;
+                playSound('type');
+            } else if (delta === 1) {
+                if (currentBitValue === 7) {
+                    // Overflow behavior: Wrap 111 -> 000
+                    currentBitValue = 0;
+                    playSound('wrap');
+
+                    cardEl.classList.add('shake-element');
+                    setTimeout(() => cardEl.classList.remove('shake-element'), 500);
+
+                    animateBossSpeech("An integer overflow! You've looped back to entry-level wages!", "🤡");
+
+                    // Randomly change colors of the buttons
+                    randomizeButtonColors();
+
+                    bitOverflowTriggered = true;
+                    document.getElementById('statusIcon3').className = 'w-3 h-3 rounded-full bg-purple-500 animate-bounce';
+                    document.getElementById('statusTag3').className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800';
+                    document.getElementById('statusTag3').innerText = 'LOOPED (000)';
+                } else {
+                    currentBitValue++;
+                    playSound('type');
+                }
+            }
+
+            // Update binary representation (pad to 3 bits)
+            const binaryStr = currentBitValue.toString(2).padStart(3, '0');
+            displayEl.innerText = binaryStr;
+            decimalEl.innerText = `Dec Value: ${currentBitValue}`;
+        }
+
+        // Generate bright random neon colors for Step 3 buttons
+        function randomizeButtonColors() {
+            const incBtn = document.getElementById('incrementBtn');
+            const decBtn = document.getElementById('decrementBtn');
+
+            const neonColors = [
+                { bg: '#ec4899', text: '#ffffff', border: '#f472b6', shadow: 'rgba(236, 72, 153, 0.5)' }, // Neon Pink
+                { bg: '#8b5cf6', text: '#ffffff', border: '#a78bfa', shadow: 'rgba(139, 92, 246, 0.5)' }, // Neon Purple
+                { bg: '#06b6d4', text: '#ffffff', border: '#22d3ee', shadow: 'rgba(6, 182, 212, 0.5)' },  // Neon Cyan
+                { bg: '#10b981', text: '#ffffff', border: '#34d399', shadow: 'rgba(16, 185, 129, 0.5)' }, // Neon Emerald
+                { bg: '#f59e0b', text: '#ffffff', border: '#fbbf24', shadow: 'rgba(245, 158, 11, 0.5)' }, // Neon Gold
+                { bg: '#ef4444', text: '#ffffff', border: '#f87171', shadow: 'rgba(239, 68, 68, 0.5)' }   // Neon Red
+            ];
+
+            const c1 = neonColors[Math.floor(Math.random() * neonColors.length)];
+            let c2 = neonColors[Math.floor(Math.random() * neonColors.length)];
+            while (c1 === c2) {
+                c2 = neonColors[Math.floor(Math.random() * neonColors.length)];
+            }
+
+            // Apply style overrides to Increment button
+            incBtn.style.backgroundColor = c1.bg;
+            incBtn.style.color = c1.text;
+            incBtn.style.borderColor = c1.border;
+            incBtn.style.boxShadow = `0 4px 14px ${c1.shadow}`;
+
+            // Apply style overrides to Decrement button
+            decBtn.style.backgroundColor = c2.bg;
+            decBtn.style.color = c2.text;
+            decBtn.style.borderColor = c2.border;
+            decBtn.style.boxShadow = `0 4px 14px ${c2.shadow}`;
+        }
+
+        function resetSystem() {
+            playSound('glitch');
+
+            // Reset inputs
+            document.getElementById('nameInput').value = '';
+            document.getElementById('salaryInput').value = '';
+
+            // Reset step 1
+            handleNameInput('');
+
+            // Reset step 2
+            handleSalaryInput({ value: '' });
+
+            // Reset step 3
+            currentBitValue = 0;
+            document.getElementById('bitDisplay').innerText = '000';
+            document.getElementById('bitDecimal').innerText = 'Dec Value: 0';
+
+            // Reset Step 3 Button Styles
+            const incBtn = document.getElementById('incrementBtn');
+            const decBtn = document.getElementById('decrementBtn');
+
+            incBtn.style = '';
+            decBtn.style = '';
+            incBtn.className = "random-btn w-1/2 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white border border-indigo-500 rounded-xl text-lg font-bold flex items-center justify-center gap-2 shadow hover:scale-105 active:scale-95";
+            decBtn.className = "random-btn w-1/2 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-lg font-bold flex items-center justify-center gap-2 shadow hover:scale-105 active:scale-95";
+
+            // Reset Status Matrix
+            document.getElementById('statusIcon3').className = 'w-3 h-3 rounded-full bg-slate-700';
+            document.getElementById('statusTag3').className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-500 border border-slate-700/50';
+            document.getElementById('statusTag3').innerText = 'STABLE';
+
+            animateBossSpeech("Terminal reset complete. Let us start fresh, employee. Do try to keep within bounds this time.", "👨‍💼");
+        }
+    </script>
+</body>
+</html>
